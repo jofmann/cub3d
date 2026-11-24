@@ -48,8 +48,6 @@ void	init_map(t_cub3d *cub3d)
 		cub3d->minimap_img_width = MINIMAP_WIDTH;
 	if (cub3d->minimap_img_height < MINIMAP_HEIGHT)
 		cub3d->minimap_img_height = MINIMAP_HEIGHT;
-	cub3d->map.width = TILE_SIZE * cub3d->map.grid_width;
-	cub3d->map.height = TILE_SIZE * cub3d->map.grid_height;
 }
 
 void	init_ray_caster(t_cub3d *cub3d)

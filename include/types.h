@@ -35,7 +35,6 @@ typedef struct s_rgb
 
 typedef struct s_img
 {
-	int				type;
 	mlx_image_t		*img;
 	char			*path;
 }					t_img;
@@ -71,8 +70,6 @@ typedef struct s_map
 	t_point			player_index;
 	char			player_orientation;
 	mlx_image_t		*img;
-	int				width;
-	int				height;
 }					t_map;
 
 typedef struct s_player
@@ -80,11 +77,7 @@ typedef struct s_player
 	t_point			pos;
 	t_point_int		grid_pos;
 	double			angle;
-	int				speed;
-	double			rot_speed;
-	int				size;
 	double			fov;
-	mlx_image_t		*img;
 }					t_player;
 
 typedef struct s_ray
@@ -98,10 +91,7 @@ typedef struct s_ray_caster
 {
 	int				num_rays;
 	double			angle_step;
-	double			start_angle;
 	double			dist_proj_plane;
-	int				wall_top;
-	int				wall_bottom;
 	bool			is_visible;
 	mlx_image_t		*img;
 }					t_ray_caster;
@@ -129,14 +119,14 @@ typedef struct s_line_helper
 	int				sy;
 }					t_line_helper;
 
-typedef struct s_wall_slice
+typedef struct s_fill
 {
-	mlx_image_t		*wall_img;
-	int				y;
-	int				offset_x;
-	int				wall_bottom;
-	int				wall_top;
-}					t_wall_slice;
+	char			**grid;
+	t_point_int		*stack;
+	int				size;
+	int				width;
+	int				height;
+}					t_fill;
 
 typedef struct s_dda
 {

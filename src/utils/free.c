@@ -14,8 +14,6 @@
 
 static void	free_images(t_cub3d *cub3d)
 {
-	if (cub3d->player.img)
-		mlx_delete_image(cub3d->mlx, cub3d->player.img);
 	if (cub3d->ray_caster.img)
 		mlx_delete_image(cub3d->mlx, cub3d->ray_caster.img);
 	if (cub3d->map.img)

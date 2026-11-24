@@ -14,9 +14,13 @@
 
 void	handle_error(t_cub3d *cub3d, char *error_msg)
 {
-	ft_printf("Error\n");
-	ft_printf("%s\n", error_msg);
+	ft_putendl_fd("Error", STDERR_FILENO);
+	ft_putendl_fd(error_msg, STDERR_FILENO);
 	if (cub3d)
+	{
 		free_cub3d(cub3d);
+		if (cub3d->mlx)
+			mlx_terminate(cub3d->mlx);
+	}
 	exit(EXIT_FAILURE);
 }

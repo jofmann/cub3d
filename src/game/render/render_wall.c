@@ -36,16 +36,18 @@ mlx_image_t	*get_wall_texture(t_cub3d *cub3d, t_ray ray, double ray_angle)
 	}
 }
 
-int	calc_texture_offset_x(t_wall wall, t_ray ray)
+int	calc_texture_offset_x(t_wall wall, t_ray ray, double ray_angle)
 {
-	int	texture_offset_x;
+	int	offset;
 
 	if (ray.is_vertical)
-		texture_offset_x = (int)ray.hit_pos.y % TILE_SIZE;
+		offset = (int)ray.hit_pos.y % TILE_SIZE;
 	else
-		texture_offset_x = (int)ray.hit_pos.x % TILE_SIZE;
-	texture_offset_x = texture_offset_x * wall.texture->width / TILE_SIZE;
-	return (texture_offset_x);
+		offset = (int)ray.hit_pos.x % TILE_SIZE;
+	if ((ray.is_vertical && cos(ray_angle) < 0)
+		|| (!ray.is_vertical && sin(ray_angle) > 0))
+		offset = TILE_SIZE - 1 - offset;
+	return (offset * wall.texture->width / TILE_SIZE);
 }
 
 void	render_wall_slice(t_cub3d *cub3d, int screen_column, t_ray ray,
@@ -61,6 +63,6 @@ void	render_wall_slice(t_cub3d *cub3d, int screen_column, t_ray ray,
 		* cub3d->ray_caster.dist_proj_plane;
 	wall.top_pixel = (cub3d->window_height / 2) - (wall.height / 2);
 	wall.bottom_pixel = (cub3d->window_height / 2) + (wall.height / 2);
-	texture_offset_x = calc_texture_offset_x(wall, ray);
+	texture_offset_x = calc_texture_offset_x(wall, ray, ray_angle);
 	draw_wall_slice(cub3d, wall, screen_column, texture_offset_x);
 }

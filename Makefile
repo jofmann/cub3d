@@ -19,10 +19,11 @@ SRCS =	main.c init.c init_img.c \
 		render.c render_wall.c \
 		ray_caster.c dda.c \
 		draw_3d.c draw_line.c draw_minimap.c draw_player.c draw.c \
-		free.c error.c convert.c str_utils.c print.c utils.c ft_split2.c mlx_utils.c fill_with_spaces.c \
+		free.c error.c convert.c str_utils.c utils.c mlx_utils.c fill_with_spaces.c \
 
 OBJS_DIR = objects
 OBJS = $(addprefix $(OBJS_DIR)/, $(SRCS:.c=.o))
+HEADERS = include/cub3d.h include/types.h include/utils.h
 
 # Colors
 GREEN = \033[0;32m
@@ -43,7 +44,7 @@ $(NAME): $(LIBMLX) $(LIBFT) $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -L$(LIBFT_DIR) -lft -L$(LIBMLX_DIR)/build -lmlx42 -lglfw -lm -pthread
 	@echo "$(GREEN)Compilation complete!$(RESET)"
 
-$(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
+$(OBJS_DIR)/%.o: %.c $(HEADERS) | $(OBJS_DIR)
 	@echo "Compiling $<"
 	@$(CC) $(CFLAGS) -c $< -o $@
 

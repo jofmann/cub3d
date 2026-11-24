@@ -30,7 +30,7 @@
 # define PLAYER_SIZE 10
 # define PLAYER_SPEED 150.0
 # define PLAYER_ROT_SPEED 1.57079632679
-# define DIR_LINE_COLOR 0x0000FF
+# define DIR_LINE_COLOR BLACK_COLOR
 
 //SETTINGS
 # define MIN_WINDOW_WIDTH 640
@@ -70,7 +70,6 @@ bool	validate_file_extension(char *path, char *extension);
 void	validate_grid(t_cub3d *cub3d);
 bool	validate_rgb(t_rgb rgb);
 void	validate_player(t_cub3d *cub3d, t_map map);
-void	flood_fill(t_cub3d *cub3d, char **grid, int x, int y);
 
 //render
 void	render_3d(t_cub3d *cub3d);

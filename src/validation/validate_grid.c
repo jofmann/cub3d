@@ -12,29 +12,41 @@
 
 #include "cub3d.h"
 
-void	flood_fill(t_cub3d *cub3d, char **grid, int x, int y)
+static bool	visit(t_fill *fill, int x, int y)
 {
-	if (x < 0 || x >= cub3d->map.grid_width || y < 0
-		|| y >= cub3d->map.grid_height)
-	{
-		free_grid(grid);
-		handle_error(cub3d, "Invalid Map");
-	}
-	if (grid[y][x] == '1' || grid[y][x] == 'X')
-		return ;
-	if (ft_strchr("\t\n\v\f\r ", grid[y][x]))
-	{
-		free_grid(grid);
-		handle_error(cub3d, "Found exit");
-	}
-	grid[y][x] = 'X';
-	flood_fill(cub3d, grid, x + 1, y);
-	flood_fill(cub3d, grid, x - 1, y);
-	flood_fill(cub3d, grid, x, y + 1);
-	flood_fill(cub3d, grid, x, y - 1);
+	char	c;
+
+	if (x < 0 || x >= fill->width || y < 0 || y >= fill->height)
+		return (false);
+	c = fill->grid[y][x];
+	if (c == '1' || c == 'X')
+		return (true);
+	if (is_white_space(c))
+		return (false);
+	fill->grid[y][x] = 'X';
+	fill->stack[fill->size] = (t_point_int){x, y};
+	fill->size++;
+	return (true);
 }
 
-void	validate_chars(t_cub3d *cub3d, char **grid)
+static bool	flood_fill(t_fill *fill, int start_x, int start_y)
+{
+	t_point_int	p;
+
+	if (!visit(fill, start_x, start_y))
+		return (false);
+	while (fill->size > 0)
+	{
+		fill->size--;
+		p = fill->stack[fill->size];
+		if (!visit(fill, p.x + 1, p.y) || !visit(fill, p.x - 1, p.y)
+			|| !visit(fill, p.x, p.y + 1) || !visit(fill, p.x, p.y - 1))
+			return (false);
+	}
+	return (true);
+}
+
+static void	validate_chars(t_cub3d *cub3d, char **grid)
 {
 	int	i;
 	int	j;
@@ -55,11 +67,24 @@ void	validate_chars(t_cub3d *cub3d, char **grid)
 
 void	validate_grid(t_cub3d *cub3d)
 {
-	char	**copy;
+	t_fill	fill;
+	bool	is_closed;
 
 	validate_chars(cub3d, cub3d->map.grid);
-	copy = copy_grid(cub3d, cub3d->map);
-	flood_fill(cub3d, copy, cub3d->map.player_index.x,
-		cub3d->map.player_index.y);
-	free_grid(copy);
+	fill.width = cub3d->map.grid_width;
+	fill.height = cub3d->map.grid_height;
+	fill.size = 0;
+	fill.grid = copy_grid(cub3d, cub3d->map);
+	fill.stack = malloc(sizeof(t_point_int) * fill.width * fill.height);
+	if (!fill.stack)
+	{
+		free_grid(fill.grid);
+		handle_error(cub3d, "Allocation failed");
+	}
+	is_closed = flood_fill(&fill, cub3d->map.player_index.x,
+			cub3d->map.player_index.y);
+	free(fill.stack);
+	free_grid(fill.grid);
+	if (!is_closed)
+		handle_error(cub3d, "Map is not enclosed by walls");
 }

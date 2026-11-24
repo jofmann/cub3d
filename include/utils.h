@@ -28,9 +28,6 @@ bool		is_valid_digit_string(char *str);
 char		*clean_str(char *str);
 bool		no_double_newline(char *str);
 
-//ft_split2
-char		**ft_split2(char const *s, char *delimiters);
-
 //convert
 double		convert_degree_to_rad(int degree);
 uint32_t	convert_abgr_to_rgba(uint32_t abgr);
@@ -44,10 +41,6 @@ void		free_grid(char **map);
 
 //error
 void		handle_error(t_cub3d *cub3d, char *error_msg);
-
-//print
-void		print_grid(char **grid);
-void		print_cub3d_info(t_cub3d *cub);
 
 //mlx
 void		set_layer_order(t_cub3d *cub3d);
