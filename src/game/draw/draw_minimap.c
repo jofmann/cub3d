@@ -35,26 +35,26 @@ void	fill_tile(t_map map, int start_x, int start_y, uint32_t color)
 	}
 }
 
-void	draw_minimap(t_cub3d cub3d)
+void	draw_minimap(t_cub3d *cub3d)
 {
 	t_point_int	p;
 	t_point_int	offset;
 
-	clear_image(cub3d.map.img);
-	draw_background(cub3d.map.img, BLACK_COLOR);
-	offset.x = (int)cub3d.player.pos.x - (cub3d.minimap_img_width / 2);
-	offset.y = (int)cub3d.player.pos.y - (cub3d.minimap_img_height / 2);
+	clear_image(cub3d->map.img);
+	draw_background(cub3d->map.img, BLACK_COLOR);
+	offset.x = (int)cub3d->player.pos.x - (cub3d->minimap_img_width / 2);
+	offset.y = (int)cub3d->player.pos.y - (cub3d->minimap_img_height / 2);
 	p.y = 0;
-	while (p.y < cub3d.map.grid_height)
+	while (p.y < cub3d->map.grid_height)
 	{
 		p.x = 0;
-		while (p.x < cub3d.map.grid_width)
+		while (p.x < cub3d->map.grid_width)
 		{
-			if (cub3d.map.grid[p.y][p.x] == '1')
-				fill_tile(cub3d.map, p.x * TILE_SIZE - offset.x, p.y
+			if (cub3d->map.grid[p.y][p.x] == '1')
+				fill_tile(cub3d->map, p.x * TILE_SIZE - offset.x, p.y
 					* TILE_SIZE - offset.y, GREY_COLOR);
 			else
-				fill_tile(cub3d.map, p.x * TILE_SIZE - offset.x, p.y
+				fill_tile(cub3d->map, p.x * TILE_SIZE - offset.x, p.y
 					* TILE_SIZE - offset.y, WHITE_COLOR);
 			p.x++;
 		}
@@ -63,14 +63,14 @@ void	draw_minimap(t_cub3d cub3d)
 	draw_player(cub3d);
 }
 
-void	draw_ray(t_cub3d cub3d, t_ray ray)
+void	draw_ray(t_cub3d *cub3d, t_ray ray)
 {
 	t_point	ray_end_pos;
 	t_point	ray_start_pos;
 
-	ray_start_pos = (t_point){cub3d.minimap_img_width / 2,
-		cub3d.minimap_img_height / 2};
+	ray_start_pos = (t_point){cub3d->minimap_img_width / 2,
+		cub3d->minimap_img_height / 2};
 	ray_end_pos = convert_world_coord_to_minimap_coord(cub3d, ray.hit_pos.x,
 			ray.hit_pos.y);
-	draw_line(cub3d.ray_caster.img, ray_start_pos, ray_end_pos, YELLOW_COLOR);
+	draw_line(cub3d->ray_caster.img, ray_start_pos, ray_end_pos, YELLOW_COLOR);
 }

@@ -12,7 +12,7 @@
 
 #include "cub3d.h"
 
-bool	check_collision(t_map map, double px, double py)
+bool	check_collision(t_map *map, double px, double py)
 {
 	int		i;
 	double	check_x;
@@ -27,13 +27,13 @@ bool	check_collision(t_map map, double px, double py)
 		check_y = py + sin(convert_degree_to_rad(i)) * PLAYER_SIZE * 1.3;
 		grid_x = (int)(check_x / TILE_SIZE);
 		grid_y = (int)(check_y / TILE_SIZE);
-		if (grid_y < 0 || grid_y >= map.grid_height || grid_x < 0
-			|| grid_x >= map.grid_width)
+		if (grid_y < 0 || grid_y >= map->grid_height || grid_x < 0
+			|| grid_x >= map->grid_width)
 		{
 			i += 30;
 			continue ;
 		}
-		if (map.grid[grid_y][grid_x] == '1')
+		if (map->grid[grid_y][grid_x] == '1')
 			return (true);
 		i += 30;
 	}

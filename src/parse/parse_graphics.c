@@ -26,6 +26,18 @@ static bool	is_graphics_full(int graphics[])
 	return (true);
 }
 
+static void	parse_config_line(t_cub3d *cub3d, int *graphics, char *line)
+{
+	if (line[0] == '\0')
+		return ;
+	if (load_texture(cub3d, graphics, line))
+		return ;
+	if (load_rgb(cub3d, graphics, line))
+		return ;
+	free(line);
+	handle_error(cub3d, "Invalid line in config");
+}
+
 void	parse_graphics(t_cub3d *cub3d, int fd)
 {
 	int		i;
@@ -34,19 +46,19 @@ void	parse_graphics(t_cub3d *cub3d, int fd)
 	int		graphics[GRAPHICS_LENGTH];
 
 	ft_memset(graphics, 0, sizeof(int) * GRAPHICS_LENGTH);
-	curr_line = get_next_line(fd);
-	while (curr_line != NULL && !is_graphics_full(graphics))
+	while (!is_graphics_full(graphics))
 	{
+		curr_line = get_next_line(fd);
+		if (!curr_line)
+			break ;
 		input_str = clean_str(curr_line);
 		free(curr_line);
-		load_texture(cub3d, graphics, input_str);
-		load_rgb(cub3d, graphics, input_str);
-		curr_line = get_next_line(fd);
+		if (!input_str)
+			handle_error(cub3d, "Allocation failed");
+		parse_config_line(cub3d, graphics, input_str);
 		free(input_str);
 	}
 	i = 0;
-	if (curr_line)
-		free(curr_line);
 	while (i < GRAPHICS_LENGTH)
 	{
 		if (graphics[i] != 1)

@@ -12,49 +12,25 @@
 
 #include "cub3d.h"
 
-void	draw_ceiling(t_cub3d cub3d)
+void	draw_ceiling(t_cub3d *cub3d)
 {
-	int			y;
-	int			x;
-	uint32_t	ceiling_color;
+	mlx_image_t	*img;
 
-	ceiling_color = convert_t_rgb_to_rgb_code(cub3d.graphics.ceiling);
-	y = 0;
-	while (y < cub3d.window_height / 2)
-	{
-		x = 0;
-		while (x < cub3d.window_width)
-		{
-			if (is_inside_image(cub3d.view_img, x, y))
-				mlx_put_pixel(cub3d.view_img, x, y, ceiling_color);
-			x++;
-		}
-		y++;
-	}
+	img = cub3d->view_img;
+	fill_rows(img, 0, img->height / 2,
+		convert_t_rgb_to_rgb_code(cub3d->graphics.ceiling));
 }
 
-void	draw_floor(t_cub3d cub3d)
+void	draw_floor(t_cub3d *cub3d)
 {
-	int			y;
-	int			x;
-	uint32_t	floor;
+	mlx_image_t	*img;
 
-	floor = convert_t_rgb_to_rgb_code(cub3d.graphics.floor);
-	y = cub3d.window_height / 2;
-	while (y < cub3d.window_height)
-	{
-		x = 0;
-		while (x < cub3d.window_width)
-		{
-			if (is_inside_image(cub3d.view_img, x, y))
-				mlx_put_pixel(cub3d.view_img, x, y, floor);
-			x++;
-		}
-		y++;
-	}
+	img = cub3d->view_img;
+	fill_rows(img, img->height / 2, img->height,
+		convert_t_rgb_to_rgb_code(cub3d->graphics.floor));
 }
 
-void	draw_wall_slice(t_cub3d cub3d, t_wall wall, int screen_column,
+void	draw_wall_slice(t_cub3d *cub3d, t_wall wall, int screen_column,
 		int texture_offset_x)
 {
 	double		y_ratio;
@@ -67,13 +43,15 @@ void	draw_wall_slice(t_cub3d cub3d, t_wall wall, int screen_column,
 	if (y < 0)
 		y = 0;
 	pixels = (uint32_t *)wall.texture->pixels;
+	if (wall.bottom_pixel > (int)cub3d->view_img->height)
+		wall.bottom_pixel = cub3d->view_img->height;
 	while (y < wall.bottom_pixel)
 	{
 		y_ratio = (double)(y - wall.top_pixel) / wall.height;
 		tex_y = y_ratio * wall.texture->height;
 		wall_color = pixels[tex_y * wall.texture->width + texture_offset_x];
-		if (is_inside_image(cub3d.view_img, screen_column, y))
-			mlx_put_pixel(cub3d.view_img, screen_column, y,
+		if (is_inside_image(cub3d->view_img, screen_column, y))
+			mlx_put_pixel(cub3d->view_img, screen_column, y,
 				convert_abgr_to_rgba(wall_color));
 		y++;
 	}

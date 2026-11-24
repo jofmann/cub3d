@@ -50,23 +50,23 @@ double	get_elapsed_time(void)
 
 void	update_player_pos(t_cub3d *cub3d, double new_x, double new_y)
 {
-	if (!check_collision(cub3d->map, new_x, new_y))
+	if (!check_collision(&cub3d->map, new_x, new_y))
 	{
 		cub3d->player.pos.x = new_x;
 		cub3d->player.pos.y = new_y;
 	}
-	else if (!check_collision(cub3d->map, new_x, cub3d->player.pos.y))
+	else if (!check_collision(&cub3d->map, new_x, cub3d->player.pos.y))
 		cub3d->player.pos.x = new_x;
-	else if (!check_collision(cub3d->map, cub3d->player.pos.x, new_y))
+	else if (!check_collision(&cub3d->map, cub3d->player.pos.x, new_y))
 		cub3d->player.pos.y = new_y;
 	cub3d->player.grid_pos.x = (int)(cub3d->player.pos.x / TILE_SIZE);
 	cub3d->player.grid_pos.y = (int)(cub3d->player.pos.y / TILE_SIZE);
 }
 
-bool	hit_wall(t_map map, t_point_int pos)
+bool	hit_wall(t_map *map, t_point_int pos)
 {
-	if (pos.y >= 0 && pos.y < map.grid_height && pos.x >= 0
-		&& pos.x < map.grid_width && map.grid[pos.y][pos.x] == '1')
+	if (pos.y >= 0 && pos.y < map->grid_height && pos.x >= 0
+		&& pos.x < map->grid_width && map->grid[pos.y][pos.x] == '1')
 		return (true);
 	return (false);
 }

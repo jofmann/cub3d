@@ -35,8 +35,8 @@ void	validate_player(t_cub3d *cub3d, t_map map)
 		handle_error(cub3d, "No or more than one player found");
 }
 
-void	validate_cub3d(t_cub3d cub3d)
+void	validate_cub3d(t_cub3d *cub3d)
 {
-	validate_player(&cub3d, cub3d.map);
-	validate_grid(&cub3d);
+	validate_player(cub3d, cub3d->map);
+	validate_grid(cub3d);
 }

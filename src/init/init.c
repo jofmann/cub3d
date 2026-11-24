@@ -67,7 +67,7 @@ void	init_cub3d(t_cub3d *cub3d, char *path)
 	setup_mlx(cub3d);
 	init_window_size(cub3d);
 	parse_cub3d(cub3d, path);
-	validate_cub3d(*cub3d);
+	validate_cub3d(cub3d);
 	init_map(cub3d);
 	init_player(cub3d);
 	init_ray_caster(cub3d);

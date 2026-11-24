@@ -19,7 +19,7 @@ char		**copy_grid(t_cub3d *cub3d, t_map map);
 double		get_elapsed_time(void);
 void		update_player_pos(t_cub3d *cub3d, double new_x, double new_y);
 bool		fill_with_spaces(char **grid);
-bool		hit_wall(t_map map, t_point_int pos);
+bool		hit_wall(t_map *map, t_point_int pos);
 
 //str_utils
 bool		is_white_space(char c);
@@ -35,7 +35,7 @@ char		**ft_split2(char const *s, char *delimiters);
 double		convert_degree_to_rad(int degree);
 uint32_t	convert_abgr_to_rgba(uint32_t abgr);
 uint32_t	convert_t_rgb_to_rgb_code(t_rgb color);
-t_point		convert_world_coord_to_minimap_coord(t_cub3d cub3d, double world_x,
+t_point		convert_world_coord_to_minimap_coord(t_cub3d *cub3d, double world_x,
 				double world_y);
 
 //free

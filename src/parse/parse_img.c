@@ -32,29 +32,30 @@ static void	parse_img(t_cub3d *cub3d, t_img *img, mlx_t *mlx, char *path)
 	init_img(cub3d, img, mlx, path);
 }
 
-void	load_texture(t_cub3d *cub3d, int *seen_flags, char *str)
+static bool	try_texture(t_cub3d *cub3d, t_img *img, char *str, char *id)
 {
-	char	*temp;
+	if (!is_texture_identifier(str, id))
+		return (false);
+	if (img->img)
+	{
+		free(str);
+		handle_error(cub3d, "Duplicate texture identifier");
+	}
+	parse_img(cub3d, img, cub3d->mlx, str + 2);
+	return (true);
+}
 
-	temp = str + 2;
-	if (is_texture_identifier(str, "NO"))
-	{
-		parse_img(cub3d, &cub3d->graphics.north, cub3d->mlx, temp);
+bool	load_texture(t_cub3d *cub3d, int *seen_flags, char *str)
+{
+	if (try_texture(cub3d, &cub3d->graphics.north, str, "NO"))
 		seen_flags[NO]++;
-	}
-	else if (is_texture_identifier(str, "WE"))
-	{
-		parse_img(cub3d, &cub3d->graphics.west, cub3d->mlx, temp);
+	else if (try_texture(cub3d, &cub3d->graphics.west, str, "WE"))
 		seen_flags[WE]++;
-	}
-	else if (is_texture_identifier(str, "EA"))
-	{
-		parse_img(cub3d, &cub3d->graphics.east, cub3d->mlx, temp);
+	else if (try_texture(cub3d, &cub3d->graphics.east, str, "EA"))
 		seen_flags[EA]++;
-	}
-	else if (is_texture_identifier(str, "SO"))
-	{
-		parse_img(cub3d, &cub3d->graphics.south, cub3d->mlx, temp);
+	else if (try_texture(cub3d, &cub3d->graphics.south, str, "SO"))
 		seen_flags[SO]++;
-	}
+	else
+		return (false);
+	return (true);
 }

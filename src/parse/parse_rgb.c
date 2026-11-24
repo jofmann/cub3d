@@ -31,6 +31,8 @@ static int	extract_color_code(char *str)
 		return (-1);
 	temp = str;
 	skip_whitespace(&temp);
+	if (temp[0] == '\0' || ft_strlen(temp) > 3)
+		return (-1);
 	if (!is_valid_digit_string(temp))
 		return (-1);
 	color_code = ft_atoi(temp);
@@ -64,24 +66,28 @@ static bool	parse_rgb(t_rgb *rgb, char *line)
 	return (true);
 }
 
-void	load_rgb(t_cub3d *cub3d, int *seen_flags, char *str)
+bool	load_rgb(t_cub3d *cub3d, int *seen_flags, char *str)
 {
-	if (str[0] == 'F')
+	t_rgb	*target;
+	int		flag;
+
+	if (str[0] == 'F' && is_white_space(str[1]))
 	{
-		if (!parse_rgb(&cub3d->graphics.floor, str + 1))
-		{
-			free(str);
-			handle_error(cub3d, "Wrong color input");
-		}
-		seen_flags[F]++;
+		target = &cub3d->graphics.floor;
+		flag = F;
 	}
-	else if (str[0] == 'C')
+	else if (str[0] == 'C' && is_white_space(str[1]))
 	{
-		if (!parse_rgb(&cub3d->graphics.ceiling, str + 1))
-		{
-			free(str);
-			handle_error(cub3d, "Wrong color input");
-		}
-		seen_flags[C]++;
+		target = &cub3d->graphics.ceiling;
+		flag = C;
 	}
+	else
+		return (false);
+	if (seen_flags[flag] || !parse_rgb(target, str + 1))
+	{
+		free(str);
+		handle_error(cub3d, "Wrong color input");
+	}
+	seen_flags[flag]++;
+	return (true);
 }

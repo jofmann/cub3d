@@ -61,11 +61,11 @@ void	parse_cub3d(t_cub3d *cub3d, char *path);
 void	parse_player_index(t_map *map);
 void	parse_graphics(t_cub3d *cub3d, int fd);
 void	parse_map(t_cub3d *cub3d, t_map *map, int fd);
-void	load_rgb(t_cub3d *cub3d, int *seen_flags, char *str);
-void	load_texture(t_cub3d *cub3d, int *seen_flags, char *str);
+bool	load_rgb(t_cub3d *cub3d, int *seen_flags, char *str);
+bool	load_texture(t_cub3d *cub3d, int *seen_flags, char *str);
 
 //validation
-void	validate_cub3d(t_cub3d cub3d);
+void	validate_cub3d(t_cub3d *cub3d);
 bool	validate_file_extension(char *path, char *extension);
 void	validate_grid(t_cub3d *cub3d);
 bool	validate_rgb(t_rgb rgb);
@@ -73,26 +73,28 @@ void	validate_player(t_cub3d *cub3d, t_map map);
 void	flood_fill(t_cub3d *cub3d, char **grid, int x, int y);
 
 //render
-void	render_3d(t_cub3d cub3d);
+void	render_3d(t_cub3d *cub3d);
 
 //draw
 void	draw_line(mlx_image_t *image, t_point start, t_point end,
 			uint32_t color);
 void	draw_filled_circle(mlx_image_t *img, t_point center, int radius,
 			uint32_t color);
-void	draw_player(t_cub3d cub3d);
+void	draw_player(t_cub3d *cub3d);
 void	fill_tile(t_map map, int x, int y, uint32_t color);
-void	draw_minimap(t_cub3d cub3d);
-void	draw_ray(t_cub3d cub3d, t_ray ray);
+void	draw_minimap(t_cub3d *cub3d);
+void	draw_ray(t_cub3d *cub3d, t_ray ray);
+void	fill_rows(mlx_image_t *img, uint32_t start, uint32_t end,
+			uint32_t color);
 void	clear_image(mlx_image_t *img);
 void	draw_background(mlx_image_t *img, uint32_t color);
-void	draw_ceiling(t_cub3d cub3d);
-void	draw_floor(t_cub3d cub3d);
-void	draw_wall_slice(t_cub3d cub3d, t_wall wall, int screen_column,
+void	draw_ceiling(t_cub3d *cub3d);
+void	draw_floor(t_cub3d *cub3d);
+void	draw_wall_slice(t_cub3d *cub3d, t_wall wall, int screen_column,
 			int texture_offset_x);
 
 //player_controls
-bool	check_collision(t_map map, double px, double py);
+bool	check_collision(t_map *map, double px, double py);
 void	player_movement(t_cub3d *cub3d);
 void	rotate_left(t_cub3d *cub3d, double delta_time);
 void	rotate_right(t_cub3d *cub3d, double delta_time);
@@ -112,10 +114,10 @@ void	handle_close(void *param);
 void	handle_resize(int width, int height, void *param);
 
 //raycaster
-void	ray_caster(t_cub3d cub3d);
-t_dda	perform_dda(t_cub3d cub3d, t_point ray_dir);
+void	ray_caster(t_cub3d *cub3d);
+t_dda	perform_dda(t_cub3d *cub3d, t_point ray_dir);
 
 //3d
-void	render_wall_slice(t_cub3d cub3d, int col, t_ray ray, double ray_angle);
+void	render_wall_slice(t_cub3d *cub3d, int col, t_ray ray, double ray_angle);
 
 #endif
