@@ -12,32 +12,56 @@
 
 #include "cub3d.h"
 
+static bool	append_line(t_buffer *buf, char *line)
+{
+	size_t	len;
+	char	*new_data;
+
+	len = ft_strlen(line);
+	if (buf->len + len + 1 > buf->cap)
+	{
+		while (buf->len + len + 1 > buf->cap)
+			buf->cap *= 2;
+		new_data = malloc(buf->cap);
+		if (!new_data)
+			return (free(line), false);
+		ft_memcpy(new_data, buf->data, buf->len + 1);
+		free(buf->data);
+		buf->data = new_data;
+	}
+	ft_memcpy(buf->data + buf->len, line, len + 1);
+	buf->len += len;
+	free(line);
+	return (true);
+}
+
 static char	*read_all_lines(t_cub3d *cub3d, int fd)
 {
-	char	*curr_line;
-	char	*combined_lines;
-	char	*temp;
+	t_buffer	buf;
+	char		*curr_line;
 
-	combined_lines = ft_strdup("");
-	if (!combined_lines)
+	buf.cap = 1024;
+	buf.len = 0;
+	buf.data = malloc(buf.cap);
+	if (!buf.data)
 		handle_error(cub3d, "Malloc failed in func: read_all_lines");
+	buf.data[0] = '\0';
 	curr_line = get_next_line(fd);
 	if (!curr_line)
 	{
-		free(combined_lines);
+		free(buf.data);
 		handle_error(cub3d, "Config must be over map");
 	}
 	while (curr_line != NULL)
 	{
-		temp = combined_lines;
-		combined_lines = ft_strjoin(combined_lines, curr_line);
-		free(temp);
-		free(curr_line);
-		if (!combined_lines)
+		if (!append_line(&buf, curr_line))
+		{
+			free(buf.data);
 			handle_error(cub3d, "Malloc failed in func: read_all_lines");
+		}
 		curr_line = get_next_line(fd);
 	}
-	return (combined_lines);
+	return (buf.data);
 }
 
 static void	parse_grid(t_cub3d *cub3d, t_map *map, int fd)

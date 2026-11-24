@@ -119,6 +119,13 @@ typedef struct s_line_helper
 	int				sy;
 }					t_line_helper;
 
+typedef struct s_buffer
+{
+	char			*data;
+	size_t			len;
+	size_t			cap;
+}					t_buffer;
+
 typedef struct s_fill
 {
 	char			**grid;

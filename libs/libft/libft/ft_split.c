@@ -46,6 +46,18 @@ static size_t	count_tokens(char const *s, char c)
 	return (token_count);
 }
 
+static char	*copy_token(char const *s, int len)
+{
+	char	*token;
+
+	token = (char *)malloc(sizeof(char) * (len + 1));
+	if (!token)
+		return (NULL);
+	ft_memcpy(token, s, len);
+	token[len] = '\0';
+	return (token);
+}
+
 static int	fill_tokens(char **tokens, char const *s, char c)
 {
 	int		token_len;
@@ -62,7 +74,7 @@ static int	fill_tokens(char **tokens, char const *s, char c)
 			token_len ++;
 		if (token_len > 0)
 		{
-			token = ft_substr(s, 0, token_len);
+			token = copy_token(s, token_len);
 			if (!token)
 			{
 				free_memory(tokens, token_index - 1);

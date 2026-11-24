@@ -80,7 +80,7 @@ void	draw_line(mlx_image_t *image, t_point start, t_point end,
 void	draw_filled_circle(mlx_image_t *img, t_point center, int radius,
 			uint32_t color);
 void	draw_player(t_cub3d *cub3d);
-void	fill_tile(t_map map, int x, int y, uint32_t color);
+void	fill_tile(t_map *map, int x, int y, uint32_t color);
 void	draw_minimap(t_cub3d *cub3d);
 void	draw_ray(t_cub3d *cub3d, t_ray ray);
 void	fill_rows(mlx_image_t *img, uint32_t start, uint32_t end,
