@@ -68,7 +68,7 @@ On macOS: `brew install cmake glfw`
 ### Build & run
 
 ```bash
-git clone <this-repo> cub3d && cd cub3d
+git clone https://github.com/jofmann/cub3d.git && cd cub3d
 make
 ./cub3d maps/libary.cub
 ```
